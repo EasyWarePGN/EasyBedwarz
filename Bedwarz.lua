@@ -1,50 +1,54 @@
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/OrionDev/OrionLib/main/source.lua"))()
-local Window = OrionLib:MakeWindow({Name = "OrionHub AntiCheat", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionHub"})
+local Window = OrionLib:MakeWindow({
+    Name = "My OrionLib GUI",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "MyOrionLibConfig"
+})
 
 local Tab1 = Window:MakeTab({
-    Name = "AntiCheat Status",
+    Name = "Main Tab",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
 })
 
 Tab1:AddSection({
-    Name = "Status",
+    Name = "Controls",
     Side = "Left"
 })
 
 local statusLabel = Tab1:AddLabel({
-    Name = "AntiCheat Status",
-    Text = "Checking..."
+    Name = "Status Label",
+    Text = "Status: Not activated"
 })
 
+local isActivated = false
+
 local function UpdateStatus()
-    local status = "Anticheat Status: Enabled"
-    if not anticheat then
-        status = "Anticheat Status: Disabled"
+    if isActivated then
+        statusLabel:SetText("Status: Activated")
+    else
+        statusLabel:SetText("Status: Not activated")
     end
-    statusLabel:SetText(status)
 end
 
-local updateConnection = game:GetService("RunService").Heartbeat:Connect(function()
-    UpdateStatus()
-end)
-
 Tab1:AddButton({
-    Name = "Toggle AntiCheat",
+    Name = "Toggle Status",
     Callback = function()
-        anticheat = not anticheat
+        isActivated = not isActivated
         UpdateStatus()
     end
 })
 
 Tab1:AddNotification({
     Title = "Welcome!",
-    Text = "Use the UI to toggle anti-cheat and view status.",
+    Text = "Welcome to the OrionLib GUI example!",
     Duration = 5
 })
 
-game.Players.LocalPlayer.Character.Humanoid.Died:Connect(function()
-    if updateConnection then
-        updateConnection:Disconnect()
-    end
-end)
+local player = game.Players.LocalPlayer
+if player and player.Character then
+    player.Character:WaitForChild("Humanoid").Died:Connect(function()
+        print("Character died, handling cleanup.")
+    end)
+end
