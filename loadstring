@@ -1,1 +1,2 @@
-https://raw.githubusercontent.com/EasyWarePGN/EasyBedwarz/main/NewMainScript.lua
+local BedwarzScript = loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyWarePGN/EasyBedwarz/main/Bedwarz.lua"))()
+
